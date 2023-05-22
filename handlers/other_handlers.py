@@ -15,7 +15,7 @@ async def other(message: Message):
     caption = 'Это не похоже на артикул товара!\n' \
               'Зайдите, пожалуйста, на сайт или приложение wildberries, ' \
               'скопируйте артикул товара (как на фото) и отправьте его боту.'
-    photo_url = 'https://github.com/ZaharSavchin/wb/blob/main/image_2023-05-15_11-02-18.png?raw=true'
+    photo_url = 'https://github.com/ZaharSavchin/wb/blob/main/photos/image_2023-05-15_11-02-18.png?raw=true'
 
     await message.answer(text=caption)
     await message.answer_photo(photo=photo_url)
