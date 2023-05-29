@@ -34,42 +34,42 @@ def convert_to_int(data):
 
 
 # Получение словаря из Redis
-# user_dict_json = r.get('users_db')
-# if user_dict_json is not None:
-#     users_db = json.loads(user_dict_json)
-#     users_db = {int(k): v for k, v in users_db.items()}
-# else:
-#     users_db = {}
-#
-#
-# users_max_items_json = r.get('users_max_items')
-# if users_max_items_json is not None:
-#     users_max_items = json.loads(users_max_items_json)
-#     users_max_items = {int(k): int(v) for k, v in users_max_items.items()}
-# else:
-#     users_max_items = {}
-#
-#
-# users_items_dict_json = r.get('users_items')
-# if users_items_dict_json is not None:
-#     users_items = json.loads(users_items_dict_json)
-#     users_items = {int(k): v for k, v in users_items.items()}
-#     for k, v in users_items.items():
-#         if len(v) > 1:
-#             for i in range(1, len(v)):
-#                 item = v[i]
-#                 updated_item = {int(key): value for key, value in item.items()}
-#                 v[i] = updated_item
-#
-# else:
-#     users_items = {}
-#
-# url_images_dict_json = r.get('url_images')
-# if url_images_dict_json is not None:
-#     url_images = json.loads(url_images_dict_json)
-#     url_images = {int(k): v for k, v in url_images.items()}
-# else:
-#     url_images = {}
+user_dict_json = r.get('users_db')
+if user_dict_json is not None:
+    users_db = json.loads(user_dict_json)
+    users_db = {int(k): v for k, v in users_db.items()}
+else:
+    users_db = {}
+
+
+users_max_items_json = r.get('users_max_items')
+if users_max_items_json is not None:
+    users_max_items = json.loads(users_max_items_json)
+    users_max_items = {int(k): int(v) for k, v in users_max_items.items()}
+else:
+    users_max_items = {}
+
+
+users_items_dict_json = r.get('users_items')
+if users_items_dict_json is not None:
+    users_items = json.loads(users_items_dict_json)
+    users_items = {int(k): v for k, v in users_items.items()}
+    for k, v in users_items.items():
+        if len(v) > 1:
+            for i in range(1, len(v)):
+                item = v[i]
+                updated_item = {int(key): value for key, value in item.items()}
+                v[i] = updated_item
+
+else:
+    users_items = {}
+
+url_images_dict_json = r.get('url_images')
+if url_images_dict_json is not None:
+    url_images = json.loads(url_images_dict_json)
+    url_images = {int(k): v for k, v in url_images.items()}
+else:
+    url_images = {}
 
 
 async def save_url_images():

@@ -15,7 +15,7 @@ bot = Bot(token=BOT_TOKEN, parse_mode='HTML')
 
 
 help_text = "Теперь отправь боту артикул товара и " \
-            "когда цена снизится или товар появится в продаже бот пришлет уведомление!"
+            "когда цена снизится бот пришлет уведомление!"
 
 
 @router.callback_query(Text(text='rub'))
@@ -25,6 +25,7 @@ async def process_rub_press(callback: CallbackQuery):
     await bot.send_message(chat_id=callback.from_user.id, text=f"Цены будут отображаться в Российских рублях 🇷🇺\n\n"
                                                                f"{help_text}")
     await save_users_items()
+    await callback.message.delete()
 
 
 @router.callback_query(Text(text='byn'))
@@ -34,6 +35,7 @@ async def process_rub_press(callback: CallbackQuery):
     await bot.send_message(chat_id=callback.from_user.id, text=f"Цены будут отображаться в Беларусских рублях 🇧🇾\n\n"
                                                                f"{help_text}")
     await save_users_items()
+    await callback.message.delete()
 
 
 @router.callback_query(Text(text='kzt'))
@@ -43,6 +45,7 @@ async def process_rub_press(callback: CallbackQuery):
     await bot.send_message(chat_id=callback.from_user.id, text=f"Цены будут отображаться в Казахских тенге 🇰🇿\n\n"
                                                                f"{help_text}")
     await save_users_items()
+    await callback.message.delete()
 
 
 @router.callback_query(Text(text='kgs'))
@@ -52,6 +55,7 @@ async def process_rub_press(callback: CallbackQuery):
     await bot.send_message(chat_id=callback.from_user.id, text=f"Цены будут отображаться в Киргизских сомах 🇰🇬\n\n"
                                                                f"{help_text}")
     await save_users_items()
+    await callback.message.delete()
 
 
 @router.callback_query(Text(text='uzs'))
@@ -61,6 +65,7 @@ async def process_rub_press(callback: CallbackQuery):
     await bot.send_message(chat_id=callback.from_user.id, text=f"Цены будут отображаться в Узбекских сумах 🇺🇿\n\n"
                                                                f"{help_text}")
     await save_users_items()
+    await callback.message.delete()
 
 
 @router.callback_query(Text(text='usd'))
@@ -70,6 +75,7 @@ async def process_rub_press(callback: CallbackQuery):
     await bot.send_message(chat_id=callback.from_user.id, text=f"Цены будут отображаться в Долларах США 🇺🇸\n\n"
                                                                f"{help_text}")
     await save_users_items()
+    await callback.message.delete()
 
 
 @router.callback_query(Text(text='amd'))
@@ -79,3 +85,4 @@ async def process_rub_press(callback: CallbackQuery):
     await bot.send_message(chat_id=callback.from_user.id, text=f"Цены будут отображаться в Армянских драмах 🇦🇲\n\n"
                                                                f"{help_text}")
     await save_users_items()
+    await callback.message.delete()

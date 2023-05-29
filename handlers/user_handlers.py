@@ -35,6 +35,7 @@ async def process_start_command(message: Message):
     ref_id = await extract_unique_code(message.text)
     if ref_id is not None and int(ref_id) in users_db and message.from_user.id not in users_db:
         users_max_items[int(ref_id)] += 1
+        await save_users_max_items()
         await bot.send_message(chat_id=int(ref_id), text=f"Пользователь @{users_db[int(ref_id)][1]} "
                                                          f"присоединился по вашему приглашению!\n"
                                                          f"Теперь у Вас максимальное количество отслеживаемых товаров: "
