@@ -99,7 +99,7 @@ async def main_search(currency: str, item_id: int, user_id: int):
         image_url = await search_image(item_id)
         url_images[item_id] = image_url
         await save_url_images()
-    elif url_images[item_id]:
+    elif item_id in url_images:
         async with aiohttp.ClientSession() as session:
             async with session.get(url_images[item_id]) as response:
                 if response.status == 200:

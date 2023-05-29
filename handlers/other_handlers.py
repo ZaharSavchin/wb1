@@ -2,6 +2,7 @@ from config_data.config import Config, load_config
 from aiogram import Bot, Router
 from aiogram.types import Message
 
+from database.database import users_max_items, save_users_max_items
 
 router = Router()
 
@@ -12,6 +13,9 @@ bot = Bot(token=BOT_TOKEN, parse_mode='HTML')
 
 @router.message()
 async def other(message: Message):
+    if message.from_user.id not in users_max_items:
+        users_max_items[message.from_user.id] = 1
+        await save_users_max_items()
     caption = 'Это не похоже на артикул товара!\n' \
               'Зайдите, пожалуйста, на сайт или приложение wildberries, ' \
               'скопируйте артикул товара (как на фото) и отправьте его боту.'

@@ -12,6 +12,8 @@ async def main():
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
     dp = Dispatcher()
 
+    await bot.send_message(chat_id=6031519620, text="бот WB перезапущен")
+
     await set_main_menu(bot)
 
     dp.include_router(admin_handlers.router)
