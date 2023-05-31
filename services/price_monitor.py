@@ -15,7 +15,7 @@ async def monitoring():
                         actuat_price_float = actuat_price.pop()
                         if actuat_price_float < price:
                             await bot.send_message(chat_id=user_id, text=f"цена товара (Артикул: {item_id})"
-                                                                         f" снизилась на {price - actuat_price_float} "
+                                                                         f" снизилась на {round(price - actuat_price_float, 2)} "
                                                                          f"{list_of_items[0]}")
                             await main_search(list_of_items[0], item_id, user_id)
         loop_counter += 1

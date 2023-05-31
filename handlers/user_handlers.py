@@ -36,7 +36,7 @@ async def process_start_command(message: Message):
     if ref_id is not None and int(ref_id) in users_db and message.from_user.id not in users_db:
         users_max_items[int(ref_id)] += 1
         await save_users_max_items()
-        await bot.send_message(chat_id=int(ref_id), text=f"Пользователь @{users_db[int(ref_id)][1]} "
+        await bot.send_message(chat_id=int(ref_id), text=f"Пользователь @{message.from_user.username} "
                                                          f"присоединился по вашему приглашению!\n"
                                                          f"Теперь у Вас максимальное количество отслеживаемых товаров: "
                                                          f"{users_max_items[int(ref_id)]}")
@@ -106,7 +106,7 @@ async def add_item_process(message: Message):
             await message.answer(f"Привет!\n"
                                  f"Я хочу поделиться с тобой полезным ботом, который помогает выгодно "
                                  f"покупать на Wildberries (он присылает уведомления, "
-                                 f"когда снижается цена на выбранный тобою товар!\n\n"
+                                 f"когда снижается цена на выбранный тобою товар!)\n\n"
                                  f"Чтобы присоединиться просто перейди по ссылке и отправь боту "
                                  f"артикул интересующего тебя товара:\n"
                                  f"https://t.me/{bot_username}?start={message.from_user.id}")
