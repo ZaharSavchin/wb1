@@ -1,7 +1,6 @@
 from database.database import users_items, save_users_items
 from services.search_function import get_price, main_search, bot
 import asyncio
-from time import time
 
 
 async def monitoring():
@@ -19,7 +18,7 @@ async def monitoring():
                                                                          f"{list_of_items[0]}")
                             await main_search(list_of_items[0], item_id, user_id)
         loop_counter += 1
-        if loop_counter % 10 == 0:
+        if loop_counter % 120 == 0 or loop_counter == 0:
             await bot.send_message(chat_id=1042048167, text=f"{loop_counter}")
         await asyncio.sleep(60)
 
