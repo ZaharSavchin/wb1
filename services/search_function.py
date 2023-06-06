@@ -34,13 +34,19 @@ async def get_item(currency, item_id):
     return response.json()
 
 
-async def prepare_item(response, currency, item_id):
+async def get_item_details(response):
     item_details = (response.get('data', {})).get('products', None)[0]
+    return item_details
+
+
+async def prepare_item(currency, item_id, item_details):
     if len(item_details) > 0:
+        price = float(item_details.get('salePriceU', None) / 100) if item_details.get('salePriceU', None) is not None else None
+        name = item_details.get('name', None)
         return (f"артикул: {item_details.get('id', None)}\n"                                                                                                 
                 f"брэнд: {item_details.get('brand', None)}\n"
-                f"название: {item_details.get('name', None)}\n"
-                f"цена: {float(item_details.get('salePriceU', None) / 100) if item_details.get('salePriceU', None) is not None else None} {currency}\n"
+                f"название: {name}\n"
+                f"цена: {price} {currency}\n"
                 f"рейтинг: {item_details.get('rating', '0')}⭐ ({item_details.get('feedbacks', '0')} отзывов)\n"
                 f"ссылка: https://www.wildberries.ru/catalog/{item_id}/detail.aspx")
 
@@ -56,7 +62,7 @@ async def get_price(currency, item_id):
     response = await get_item(currency, item_id)
     item_details = (response.get('data', {})).get('products', None)[0]
     if len(item_details) > 0:
-        return {float(item_details.get('salePriceU', None) / 100) if item_details.get('salePriceU', None) is not None else None}
+        return float(item_details.get('salePriceU', None) / 100) if item_details.get('salePriceU', None) is not None else None
 
 
 async def search_image(item_id: int):
@@ -86,10 +92,12 @@ class DeleteCallbackFactory(CallbackData, prefix='id_article'):
     item_id: int
 
 
-async def main_search(currency: str, item_id: int, user_id: int):
+async def main_search(currency: str, item_id: int, user_id: int, item_details=None):
     response = await get_item(currency, item_id)
     try:
-        message = await prepare_item(response, currency, item_id)
+        if item_details is None:
+            item_details = await get_item_details(response)
+        message = await prepare_item(currency, item_id, item_details)
     except Exception:
         await bot.send_message(chat_id=user_id, text="По этому артикулу ничего не найдено!")
         return None
@@ -99,43 +107,29 @@ async def main_search(currency: str, item_id: int, user_id: int):
         image_url = await search_image(item_id)
         url_images[item_id] = image_url
         await save_url_images()
-    elif item_id in url_images:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url_images[item_id]) as response:
-                if response.status == 200:
-                    image_url = url_images[item_id]
-                else:
-                    image_url = await search_image(item_id)
-                    url_images[item_id] = image_url
-                    await save_url_images()
-    items = users_items.copy()[user_id][1:]
-    keys = []
-    for dictionary in items:
-        keys.extend(dictionary.keys())
-    if item_id not in keys:
-        price = await get_price(currency, item_id)
-        price_int = price.pop()
-        item_price = {item_id: price_int}
-        users_items[user_id].append(item_price)
-        await save_users_items()
-    elif item_id in keys:
-        for dictionary in items:
-            if item_id in dictionary:
-                price = await get_price(currency, item_id)
-                price_int = price.pop()
-                dictionary[item_id] = price_int
-        await save_users_items()
+    # elif item_id in url_images:
+    #     async with aiohttp.ClientSession() as session:
+    #         async with session.get(url_images[item_id]) as response:
+    #             if response.status == 200:
+    #                 image_url = url_images[item_id]
+    #             else:
+    #                 image_url = await search_image(item_id)
+    #                 url_images[item_id] = image_url
+    #                 await save_url_images()
+    image_url = url_images[item_id]
+    price_int = float(item_details.get('salePriceU', None) / 100) if item_details.get('salePriceU', None) is not None else None
+    users_items[user_id][1][item_id] = price_int
+    await save_users_items()
 
-    name = await get_name(currency, item_id)
-    name_str = ''.join(name)
-    button = InlineKeyboardButton(text=f"Удалить: '{name_str}'",
+    name = item_details.get('name', None)
+    button = InlineKeyboardButton(text=f"Удалить: '{name}'",
                                   callback_data=DeleteCallbackFactory(user_id=user_id,
                                                                       item_id=item_id).pack())
     markup = InlineKeyboardMarkup(inline_keyboard=[[button]])
-    if image_url:
-        message_with_image = f'{message}\n<a href="{image_url}">&#8203;</a>'
-        await bot.send_message(chat_id=user_id, text=message_with_image, parse_mode=ParseMode.HTML, reply_markup=markup)
-    else:
-        await bot.send_message(chat_id=user_id, text=message, reply_markup=markup)
-
+    # if image_url:
+    # message_with_image = f'{message}\n<a href="{image_url}">&#8203;</a>'
+    # await bot.send_message(chat_id=user_id, text=message_with_image, parse_mode=ParseMode.HTML, reply_markup=markup)
+    await bot.send_photo(chat_id=user_id, photo=image_url, caption=message, reply_markup=markup)
+    # else:
+    #     await bot.send_message(chat_id=user_id, text=message, reply_markup=markup)
 

@@ -46,7 +46,7 @@ async def process_start_command(message: Message):
     if message.from_user.id not in users_db:
         await new_user(message)
     users_db[message.from_user.id] = [message.from_user.full_name, message.from_user.username]
-    users_items[message.from_user.id] = ['rub']
+    users_items[message.from_user.id] = ['rub', {}]
     await message.answer(LEXICON["/start"])
     await message.answer('Выберите необходимую валюту для цен товара', reply_markup=create_currency_keyboard(*LEXICON_CURRENCY.keys()))
     await save_users_db()
@@ -58,6 +58,7 @@ async def process_help_command(message: Message):
     if message.from_user.id not in users_max_items:
         users_max_items[message.from_user.id] = 1
         await save_users_max_items()
+    await save_users_max_items()
     if message.from_user.id not in users_db:
         await new_user(message)
     users_db[message.from_user.id] = [message.from_user.full_name, message.from_user.username]
@@ -85,19 +86,21 @@ async def get_list_of_items(message: Message):
 
 @router.message(lambda message: isinstance(message.text, str) and re.match(r'^\s*\d+\s*$', message.text))
 async def add_item_process(message: Message):
-    if message.from_user.id not in users_max_items:
-        users_max_items[message.from_user.id] = 1
+    print(users_items)
+    id_ = message.from_user.id
+    if id_ not in users_max_items:
+        users_max_items[id_] = 1
         await save_users_max_items()
-    if message.from_user.id not in users_db:
+    if id_ not in users_db:
         await new_user(message)
-    users_db[message.from_user.id] = [message.from_user.full_name, message.from_user.username]
+    users_db[id_] = [message.from_user.full_name, message.from_user.username]
     # users_items[message.from_user.id] = []
-    if message.from_user.id not in users_items:
+    if id_ not in users_items:
         await process_start_command(message)
     else:
-        if len(users_items[message.from_user.id]) < users_max_items[message.from_user.id] + 1 \
-                or int(message.text) in [element for each_list in [[i for i in k] for k in users_items[message.from_user.id][1:]] for element in each_list]:
-            await main_search(users_items[message.from_user.id][0], int(message.text), message.from_user.id)
+        if len(users_items[id_][1]) < users_max_items[id_]\
+                or int(message.text) in users_items[id_][1]:
+            await main_search(users_items[id_][0], int(message.text), id_)
         else:
             bot_info = await bot.get_me()
             bot_username = bot_info.username
@@ -109,5 +112,5 @@ async def add_item_process(message: Message):
                                  f"когда снижается цена на выбранный тобою товар!)\n\n"
                                  f"Чтобы присоединиться просто перейди по ссылке и отправь боту "
                                  f"артикул интересующего тебя товара:\n"
-                                 f"https://t.me/{bot_username}?start={message.from_user.id}")
-            await message.answer(f"https://t.me/{bot_username}?start={message.from_user.id}")
+                                 f"https://t.me/{bot_username}?start={id_}")
+            await message.answer(f"https://t.me/{bot_username}?start={id_}")
