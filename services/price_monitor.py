@@ -23,7 +23,7 @@ async def monitoring():
                         await main_search(list_of_items[0], item_id, user_id, item_details=item_details)
             await asyncio.sleep(0.1)
         loop_counter += 1
-        if loop_counter % 120 == 0 or loop_counter == 1:
+        if loop_counter % 20 == 0 or loop_counter == 1:
             await bot.send_message(chat_id=1042048167, text=f"{loop_counter}")
         await asyncio.sleep(300)
 
