@@ -71,7 +71,7 @@ async def get_list_of_items(message: Message):
         users_max_items[message.from_user.id] = 1
         await save_users_max_items()
     user_id = message.from_user.id
-    if user_id not in users_items or len(users_items[user_id]) < 2:
+    if user_id not in users_items or len(users_items[user_id][1]) == 0:
         await message.answer(text="У вас нет отслеживаемых товаров!\n"
                                   "Отправьте боту артикул товара, цену которого хотите отслеживать.")
     else:
