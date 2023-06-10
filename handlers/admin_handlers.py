@@ -29,12 +29,12 @@ async def stat_message(message: Message):
                 answer.append(f"{counter}){name}(@{username}, {i}, {refs})🤷\n")
                 counter += 1
 
-        if len(answer) > 100:
-            messages = len(answer) // 100
+        if len(answer) > 50:
+            messages = len(answer) // 50
             counter = 0
             for i in range(messages + 1):
-                stat = ''.join(answer[counter: counter + 100])
-                counter += 100
+                stat = ''.join(answer[counter: counter + 50])
+                counter += 50
                 await message.answer(f"{stat}")
         else:
             stat = ''.join(answer)

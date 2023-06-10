@@ -16,11 +16,14 @@ async def monitoring():
                     actual_price = float(item_details.get('salePriceU', None) / 100) if item_details.get('salePriceU', None) is not None else None
                     name = item_details.get('name', None)
                     if actual_price < price:
-                        sale = price - actual_price
-                        await bot.send_message(chat_id=user_id, text=f"цена товара '{name}' (Артикул: {item_id})"
+                        try:
+                            sale = price - actual_price
+                            await bot.send_message(chat_id=user_id, text=f"цена товара '{name}' (Артикул: {item_id})"
                                                                      f" снизилась на {round(sale, 2)} "
                                                                      f"{list_of_items[0]}")
-                        await main_search(list_of_items[0], item_id, user_id, item_details=item_details)
+                            await main_search(list_of_items[0], item_id, user_id, item_details=item_details)
+                        except Exception as error:
+                            print(error)
             await asyncio.sleep(0.1)
         loop_counter += 1
         if loop_counter % 20 == 0 or loop_counter == 1:
