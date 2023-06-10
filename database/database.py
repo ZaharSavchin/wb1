@@ -33,7 +33,6 @@ if users_max_items_json is not None:
     users_max_items = {int(k): int(v) for k, v in users_max_items.items()}
 else:
     users_max_items = {}
-print(users_max_items)
 
 users_items_dict_json = r.get('users_items')
 if users_items_dict_json is not None:

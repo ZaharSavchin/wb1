@@ -42,7 +42,7 @@ async def stat_message(message: Message):
     else:
         counter = 0
         for i in users_items.copy():
-            if len(users_items.copy()[i]) > 1:
+            if len(users_items.copy()[i][1]) > 0:
                 counter += 1
         await message.answer(f"users: {len(users_db)}\nactive users: {counter}")
 

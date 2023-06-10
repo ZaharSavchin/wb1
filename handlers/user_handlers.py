@@ -86,7 +86,6 @@ async def get_list_of_items(message: Message):
 
 @router.message(lambda message: isinstance(message.text, str) and re.match(r'^\s*\d+\s*$', message.text))
 async def add_item_process(message: Message):
-    print(users_items)
     id_ = message.from_user.id
     if id_ not in users_max_items:
         users_max_items[id_] = 1
