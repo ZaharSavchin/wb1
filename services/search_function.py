@@ -129,7 +129,13 @@ async def main_search(currency: str, item_id: int, user_id: int, item_details=No
     # if image_url:
     # message_with_image = f'{message}\n<a href="{image_url}">&#8203;</a>'
     # await bot.send_message(chat_id=user_id, text=message_with_image, parse_mode=ParseMode.HTML, reply_markup=markup)
-    await bot.send_photo(chat_id=user_id, photo=image_url, caption=message, reply_markup=markup)
+    try:
+        await bot.send_photo(chat_id=user_id, photo=image_url, caption=message, reply_markup=markup)
+    except Exception as err:
+        print(err)
+        message_with_image = f'{message}\n<a href="{image_url}">&#8203;</a>'
+        await bot.send_message(chat_id=user_id, text=message_with_image, parse_mode=ParseMode.HTML, reply_markup=markup)
+
     # else:
     #     await bot.send_message(chat_id=user_id, text=message, reply_markup=markup)
 
