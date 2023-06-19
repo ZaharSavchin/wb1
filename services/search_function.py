@@ -46,7 +46,7 @@ async def prepare_item(currency, item_id, item_details):
         return (f"артикул: {item_details.get('id', None)}\n"                                                                                                 
                 f"брэнд: {item_details.get('brand', None)}\n"
                 f"название: {name}\n"
-                f"цена: {price} {currency}\n"
+                f"цена: {price} {currency} (без учёта Вашей персональной скидки)\n"
                 f"рейтинг: {item_details.get('rating', '0')}⭐ ({item_details.get('feedbacks', '0')} отзывов)\n"
                 f"ссылка: https://www.wildberries.ru/catalog/{item_id}/detail.aspx")
 
