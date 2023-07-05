@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from environs import Env
 
+admin_id = 6031519620
+
 
 @dataclass
 class TgBot:

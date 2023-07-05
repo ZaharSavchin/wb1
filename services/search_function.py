@@ -39,8 +39,12 @@ async def get_item(currency, item_id):
     return response.json()
 
 
-async def get_item_details(response):
-    item_details = (response.get('data', {})).get('products', None)[0]
+async def get_itemsu_details(response):
+    try:
+        item_details = (response.get('data', {})).get('products', None)[0]
+    except Exception as err:
+        print(err, response)
+        return None
     return item_details
 
 

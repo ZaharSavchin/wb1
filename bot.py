@@ -5,6 +5,7 @@ from config_data.config import Config, load_config
 from keyboards.main_menu import set_main_menu
 from handlers import other_handlers, user_handlers, admin_handlers, \
     currency_handlers, delete_item_handler, change_max_items_handler, delete_users_handler
+from commercial import main_commercial, send_button, commercial_url_button
 
 
 async def main():
@@ -19,6 +20,9 @@ async def main():
 
     dp.include_router(admin_handlers.router)
     dp.include_router(delete_users_handler.router)
+    dp.include_router(main_commercial.router)
+    dp.include_router(send_button.router)
+    dp.include_router(commercial_url_button.router)
     dp.include_router(user_handlers.router)
     dp.include_router(currency_handlers.router)
     dp.include_router(other_handlers.router)
