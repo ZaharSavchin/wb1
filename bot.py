@@ -5,7 +5,7 @@ from config_data.config import Config, load_config
 from keyboards.main_menu import set_main_menu
 from handlers import other_handlers, user_handlers, admin_handlers, \
     currency_handlers, delete_item_handler, change_max_items_handler, delete_users_handler
-from commercial import main_commercial, send_button, commercial_url_button
+from commercial import send_button, commercial_url_button, main_commercial
 
 
 async def main():
