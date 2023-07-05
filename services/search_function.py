@@ -40,11 +40,7 @@ async def get_item(currency, item_id):
 
 
 async def get_item_details(response):
-    try:
-        item_details = (response.get('data', {})).get('products', None)[0]
-    except Exception as err:
-        print(err, response)
-        return None
+    item_details = (response.get('data', {})).get('products', None)[0]
     return item_details
 
 
