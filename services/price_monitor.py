@@ -9,9 +9,9 @@ async def monitoring():
         counter = 1
         for user_id, list_of_items in users_items.copy().items():
             if len(list_of_items[1]) > 0:
-                try:
-                    for item_id, price in list_of_items[1].items():
-                        print(f'{counter}) {item_id}')
+                for item_id, price in list_of_items[1].items():
+                    print(f'{counter}) {item_id}')
+                    try:
                         # actual_price = await get_price(list_of_items[0], item_id)
                         # actual_price_float = actual_price.pop()
                         response = await get_item(currency=list_of_items[0], item_id=item_id)
@@ -27,8 +27,8 @@ async def monitoring():
                                 await main_search(list_of_items[0], item_id, user_id, item_details=item_details)
                             except Exception as error:
                                 print(error)
-                except Exception as error:
-                    print(error)
+                    except Exception as e:
+                        print(e)
             else:
                 print(counter)
             counter += 1
