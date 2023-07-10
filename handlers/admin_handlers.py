@@ -3,6 +3,7 @@ from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from services.price_monitor import monitoring
 from database.database import users_db, users_items, users_max_items
 from aiogram.filters.callback_data import CallbackData
+from config_data.config import admin_id
 
 
 router = Router()
@@ -23,10 +24,17 @@ async def stat_message(message: Message):
             if i in users_items:
                 cur = users_items[i][0]
                 items = users_items[i][1:]
-                answer.append(f"{counter}){name}(@{username}, {i}, {refs}): {cur}, {items}✅\n")
+                if message.from_user.id == admin_id:
+                    answer.append(f"{counter}){name}(@{username}, {i}, {refs}): {cur}, {items}✅\n")
+                else:
+                    answer.append(f"{counter}){name}, @{username}: {cur}\n")
+
                 counter += 1
             else:
-                answer.append(f"{counter}){name}(@{username}, {i}, {refs})🤷\n")
+                if message.from_user.id == admin_id:
+                    answer.append(f"{counter}){name}(@{username}, {i}, {refs})🤷\n")
+                else:
+                    answer.append(f"{counter}){name}, @{username}\n")
                 counter += 1
 
         if len(answer) > 50:
@@ -44,7 +52,10 @@ async def stat_message(message: Message):
         for i in users_items.copy():
             if len(users_items.copy()[i][1]) > 0:
                 counter += 1
-        await message.answer(f"users: {len(users_db)}\nactive users: {counter}")
+        if message.from_user.id == admin_id:
+            await message.answer(f"users: {len(users_db)}\nactive users: {counter}")
+        else:
+            await message.answer(f"users: {len(users_db)}")
 
 
 class MaxItemsCallbackFactory(CallbackData, prefix='max_items'):

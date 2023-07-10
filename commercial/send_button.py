@@ -19,7 +19,9 @@ async def send_commercial_pressed(callback: CallbackQuery,
                                   callback_data: CommercialCallbackFactory):
     commercial_id = callback_data.commercial_id
     button = InlineKeyboardButton(text=f"перейти по ссылке",
-                                  callback_data=CommercialUrlFactory(commercial_id=commercial_id).pack())
+                                  callback_data=CommercialUrlFactory(commercial_id=commercial_id).pack(),
+                                  url=commercial_dict[commercial_id]["commercial_url"])
+
     markup = InlineKeyboardMarkup(inline_keyboard=[[button]])
     if commercial_dict[commercial_id]["image_url"] == "none":
         for user, name_username in users_db.copy().items():

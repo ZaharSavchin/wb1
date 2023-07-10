@@ -20,8 +20,8 @@ async def monitoring():
                             try:
                                 sale = price - actual_price
                                 await bot.send_message(chat_id=user_id, text=f"цена товара '{name}' (Артикул: {item_id})"
-                                                                         f" снизилась на {round(sale, 2)} "
-                                                                         f"{list_of_items[0]}")
+                                                                             f" снизилась на {round(sale, 2)} "
+                                                                             f"{list_of_items[0]}")
                                 await main_search(list_of_items[0], item_id, user_id, item_details=item_details)
                             except Exception as error:
                                 print(error)

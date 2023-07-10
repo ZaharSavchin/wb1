@@ -12,9 +12,10 @@ router = Router()
 @router.callback_query(CommercialUrlFactory.filter())
 async def url_button(callback: CallbackQuery,
                      callback_data: CommercialUrlFactory):
+    print("обработчик")
     commercial_id = callback_data.commercial_id
-    commercial_url = commercial_dict[commercial_id]["commercial_url"]
-    await callback.answer(text=f'{commercial_url}')
+    # commercial_url = commercial_dict[commercial_id]["commercial_url"]
+    await callback.answer()
     commercial_dict[commercial_id]["users_go_on_url"] += 1
     name = callback.from_user.full_name
     username = callback.from_user.username
