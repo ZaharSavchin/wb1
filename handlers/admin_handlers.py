@@ -91,3 +91,21 @@ async def change_max_items(message: Message):
     markup = InlineKeyboardMarkup(inline_keyboard=[[button_minus, button_plus]])
 
     await message.answer(text=answer, reply_markup=markup)
+
+
+@router.message(F.text.startswith('bot cur'))
+async def count_cur(message: Message):
+    country = {'rub': 0, 'byn': 0, 'kzt': 0, 'kgs': 0, 'uzs': 0, 'usd': 0, 'amd': 0}
+    for i in users_db.copy():
+        cur = users_items[i][0]
+        country[cur] += 1
+    country_message = f'Россия: {country["rub"]}\n' \
+                      f'Беларусь: {country["byn"]}\n' \
+                      f'Казахстан: {country["kzt"]}\n' \
+                      f'Киргизстан: {country["kgs"]}\n' \
+                      f'Узбекистан: {country["uzs"]}\n' \
+                      f'Армения: {country["amd"]}\n' \
+                      f'В долларах США: {country["usd"]}'
+    print(country)
+    print(country_message)
+    await message.answer(f'{country_message}')
