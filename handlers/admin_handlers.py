@@ -39,6 +39,14 @@ async def stat_message(message: Message):
                     answer.append(f"{counter}){name}, @{username}\n")
                 counter += 1
 
+        country_message = f'Россия: {country["rub"]}\n' \
+                          f'Беларусь: {country["byn"]}\n' \
+                          f'Казахстан: {country["kzt"]}\n' \
+                          f'Киргизстан: {country["kgs"]}\n' \
+                          f'Узбекистан: {country["uzs"]}\n' \
+                          f'Армения: {country["amd"]}\n' \
+                          f'В долларах США: {country["usd"]}'
+
         if len(answer) > 50:
             messages = len(answer) // 50
             counter = 0
@@ -46,16 +54,10 @@ async def stat_message(message: Message):
                 stat = ''.join(answer[counter: counter + 50])
                 counter += 50
                 await message.answer(f"{stat}")
+            await message.answer(f'{country_message}')
         else:
             stat = ''.join(answer)
             await message.answer(f"{stat}")
-            country_message = f'Россия: {country["rub"]}\n' \
-                              f'Беларусь: {country["byn"]}\n' \
-                              f'Казахстан: {country["kzt"]}\n' \
-                              f'Киргизстан: {country["kgs"]}\n' \
-                              f'Узбекистан: {country["uzs"]}\n' \
-                              f'Армения: {country["amd"]}\n' \
-                              f'В долларах США: {country["usd"]}'
             await message.answer(f'{country_message}')
     else:
         counter = 0
@@ -106,6 +108,4 @@ async def count_cur(message: Message):
                       f'Узбекистан: {country["uzs"]}\n' \
                       f'Армения: {country["amd"]}\n' \
                       f'В долларах США: {country["usd"]}'
-    print(country)
-    print(country_message)
     await message.answer(f'{country_message}')
