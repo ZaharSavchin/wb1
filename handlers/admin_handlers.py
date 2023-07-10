@@ -17,12 +17,14 @@ async def stat_message(message: Message):
     elif message.text.endswith("all"):
         answer = []
         counter = 1
+        country = {'rub': 0, 'byn': 0, 'kzt': 0, 'kgs': 0, 'uzs': 0, 'usd': 0, 'amd': 0}
         for i in users_db.copy():
             name = users_db[i][0]
             username = users_db[i][1]
             refs = users_max_items[i]
             if i in users_items:
                 cur = users_items[i][0]
+                country[cur] += 1
                 items = users_items[i][1:]
                 if message.from_user.id == admin_id:
                     answer.append(f"{counter}){name}(@{username}, {i}, {refs}): {cur}, {items}✅\n")
@@ -47,6 +49,14 @@ async def stat_message(message: Message):
         else:
             stat = ''.join(answer)
             await message.answer(f"{stat}")
+            country_message = f'Россия: {country["rub"]}\n' \
+                              f'Беларусь: {country["byn"]}\n' \
+                              f'Казахстан: {country["kzt"]}\n' \
+                              f'Киргизстан: {country["kgs"]}\n' \
+                              f'Узбекистан: {country["uzs"]}\n' \
+                              f'Армения: {country["amd"]}\n' \
+                              f'В долларах США: {country["usd"]}'
+            await message.answer(f'{country_message}')
     else:
         counter = 0
         for i in users_items.copy():
