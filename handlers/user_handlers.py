@@ -45,7 +45,10 @@ async def process_start_command(message: Message):
         await save_users_max_items()
     if message.from_user.id not in users_db:
         await new_user(message)
-    users_db[message.from_user.id] = [message.from_user.full_name, message.from_user.username]
+    name = message.from_user.full_name
+    if "<" in name or ">" in name:
+        name = name.replace(">", "&gt;").replace("<", "&lt;")
+    users_db[message.from_user.id] = [name, message.from_user.username]
     users_items[message.from_user.id] = ['rub', {}]
     await message.answer(LEXICON["/start"])
     await message.answer('Выберите необходимую валюту для цен товара', reply_markup=create_currency_keyboard(*LEXICON_CURRENCY.keys()))
@@ -61,7 +64,10 @@ async def process_help_command(message: Message):
     await save_users_max_items()
     if message.from_user.id not in users_db:
         await new_user(message)
-    users_db[message.from_user.id] = [message.from_user.full_name, message.from_user.username]
+    name = message.from_user.full_name
+    if "<" in name or ">" in name:
+        name = name.replace(">", "&gt;").replace("<", "&lt;")
+    users_db[message.from_user.id] = [name, message.from_user.username]
     await message.answer(LEXICON["/help"])
 
 
@@ -92,7 +98,10 @@ async def add_item_process(message: Message):
         await save_users_max_items()
     if id_ not in users_db:
         await new_user(message)
-    users_db[id_] = [message.from_user.full_name, message.from_user.username]
+    name = message.from_user.full_name
+    if "<" in name or ">" in name:
+        name = name.replace(">", "&gt;").replace("<", "&lt;")
+    users_db[id_] = [name, message.from_user.username]
     # users_items[message.from_user.id] = []
     if id_ not in users_items:
         await process_start_command(message)
