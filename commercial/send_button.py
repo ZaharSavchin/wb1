@@ -1,3 +1,5 @@
+import asyncio
+
 from aiogram import Router, F
 from aiogram.filters.callback_data import CallbackData
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
@@ -15,7 +17,7 @@ router = Router()
 
 
 async def send_commercial_stat(answer: list, bot, commercial_id, admin_id):
-    message_long = 100
+    message_long = 50
     if len(answer) > message_long:
         messages = len(answer) // message_long
         counter = 0
@@ -25,7 +27,11 @@ async def send_commercial_stat(answer: list, bot, commercial_id, admin_id):
             try:
                 await bot.send_message(chat_id=commercial_id, text=f"{stat}")
             except Exception:
-                await bot.send_message(chat_id=admin_id, text=f"{stat}")
+                try:
+                    await bot.send_message(chat_id=admin_id, text=f"{stat}")
+                except Exception as err:
+                    await bot.send_message(chat_id=admin_id, text=f"проблемы с отправкой статистики, {err}")
+            await asyncio.sleep(1)
     else:
         stat = ''.join(answer)
         try:
