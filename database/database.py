@@ -15,7 +15,28 @@ url_images: [int, str] = {}
 users_max_items: [int, int] = {}
 # users_max_items: [int, int] = {5754662958: 1, 6031519620: 3}
 
+commercial_dict = {}
+# commercial_dict = {65165165165: {'name': 'reclamodatel, anisimova, @katerina',
+#                                  'image_url': 'http//...jpg',
+#                                  'commercial_url': 'https//...zverugi.com',
+#                                  'countries': 'rub, byn, kzt'
+#                                  'message': 'join me!!!',
+#                                  'sent_messages': 5100,
+#                                  'users_go_on_url': 1200}}
+
 r = redis.Redis(host='127.0.0.1', port=6379, db=5)
+
+
+commercial_dict_json = r.get('commercial_dict')
+if commercial_dict_json is not None:
+    commercial_dict = json.loads(commercial_dict_json)
+    commercial_dict = {int(k): v for k, v in commercial_dict.items()}
+    for key, value in commercial_dict.items():
+        int(value["sent_messages"])
+        int(value["users_go_on_url"])
+else:
+    commercial_dict = {}
+print(commercial_dict)
 
 
 # Получение словаря из Redis
@@ -66,3 +87,7 @@ async def save_users_items():
 
 async def save_users_max_items():
     r.set('users_max_items', json.dumps(users_max_items))
+
+
+async def save_commercial_dict():
+    r.set('commercial_dict', json.dumps(commercial_dict))
