@@ -82,5 +82,14 @@ async def check_commercial(message: Message):
                                  f'Сообщений отправлено: {data["sent_messages"]}')
 
 
-
+@router.message(F.text.startswith('test commercial message'))
+async def test_message(message: Message):
+    answer = []
+    counter = 0
+    for id_, name in users_db.copy().items():
+        users_country = users_items[id_][0]
+        if users_country == 'byn':
+            counter += 1
+            answer.append(f"{counter}) {name[0]}, @{name[1]} получил рекламу\n")
+    await send_commercial_stat(answer, bot, 1042048167, admin_id)
 
