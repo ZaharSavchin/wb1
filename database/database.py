@@ -36,7 +36,7 @@ if commercial_dict_json is not None:
         int(value["users_go_on_url"])
 else:
     commercial_dict = {}
-print(commercial_dict)
+
 
 
 # Получение словаря из Redis

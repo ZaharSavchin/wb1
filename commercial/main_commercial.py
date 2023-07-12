@@ -27,6 +27,16 @@ async def get_id(message: Message):
     await bot.send_message(chat_id=admin_id, text=f'{user_id}')
 
 
+@router.message(F.text == 'help commercial')
+async def test_message(message: Message):
+    await message.answer('send commercial (id рекламодателя)\n'
+                         '&имя рекламы*\n'
+                         '#страны или all\n'
+                         '{photo_url}\n'
+                         '[url]\n'
+                         'текст\n')
+
+
 @router.message(F.text.startswith('send commercial ('))
 async def test_message(message: Message):
 

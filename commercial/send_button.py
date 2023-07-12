@@ -93,9 +93,7 @@ async def test_message(message: Message):
     answer = []
     counter = 0
     for id_, name in users_db.copy().items():
-        users_country = users_items[id_][0]
-        if users_country == 'byn':
-            counter += 1
-            answer.append(f"{counter}) {name[0]}, @{name[1]} получил рекламу\n")
-    await send_commercial_stat(answer, bot, 1042048167, admin_id)
+        counter += 1
+        answer.append(f"{counter}) {name[0]}, @{name[1]} получил рекламу\n")
+    await send_commercial_stat(answer, bot, message.from_user.id, admin_id)
 
