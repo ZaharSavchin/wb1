@@ -4,7 +4,7 @@ from aiogram import Router, F
 from aiogram.filters.callback_data import CallbackData
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
 from commercial.main_commercial import CommercialCallbackFactory, commercial_dict
-from database.database import users_db, users_items
+from database.database import users_db, users_items, save_commercial_dict
 from services.search_function import bot
 from config_data.config import admin_id
 
@@ -61,7 +61,6 @@ async def send_commercial_pressed(callback: CallbackQuery,
                 except Exception:
                     await bot.send_message(chat_id=admin_id, text=f'{name_username[0]}, @{name_username[1]} недоступен')
     else:
-        print(commercial_dict[commercial_id]["countries"])
         for user, name_username in users_db.copy().items():
             users_country = users_items[user][0]
             if users_country in commercial_dict[commercial_id]["countries"] or commercial_dict[commercial_id]["countries"] == 'all':
@@ -72,11 +71,14 @@ async def send_commercial_pressed(callback: CallbackQuery,
                 except Exception:
                     await bot.send_message(chat_id=admin_id, text=f'{name_username[0]}, @{name_username[1]} недоступен')
 
+    await save_commercial_dict()
     await send_commercial_stat(answer, bot, commercial_id, admin_id)
+    await callback.answer()
 
 
 @router.message(F.text == "check commercial")
 async def check_commercial(message: Message):
+    await save_commercial_dict()
     if message.from_user.id == admin_id:
         for id_, data in commercial_dict.copy().items():
             await message.answer(f'{id_}\n'

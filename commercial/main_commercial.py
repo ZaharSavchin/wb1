@@ -93,4 +93,3 @@ async def test_message(message: Message):
 
         await message.answer(text="У вас нет прав администратора")
         await bot.send_message(chat_id=admin_id, text=f'⚠️пользователь {name_}, @{username} пытался отправить рекламу⚠️')
-    print(commercial_dict)
