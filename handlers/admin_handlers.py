@@ -114,6 +114,7 @@ async def count_cur(message: Message):
 
 @router.message(F.text == 'bot send ads to users')
 async def send_ads(message: Message):
+    counter = 0
     for user_id, name in users_db.copy().items():
         name = name[0]
         if "<" in name or ">" in name:
@@ -133,6 +134,10 @@ async def send_ads(message: Message):
                                          f'<b>через ЕРИП:</b> Банковские, финансовые услуги -> Банки, НКФО -> Белинвестбанк -> Пополнение счёта -> номер договора: 99oBYN-D85F11\n\n'
                                          f'<b>на QIWI кошелек:</b> +375 29 833 4964\n'
                                          f'http://qiwi.com/p/375298334964', parse_mode='HTML'
-                                    )
+                                 )
+            counter += 1
         except Exception:
-            await bot.send_message(chat_id=6031519620, text=f'{user_id}, {name} недоступен')
+            await bot.send_message(chat_id=admin_id, text=f'{user_id}, {name} недоступен')
+
+    await bot.send_message(chat_id=admin_id, text=f'{counter} сообщений доставлено')
+
