@@ -1,3 +1,6 @@
+import asyncio
+
+import aiogram
 from aiogram import Router, F
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 
@@ -35,16 +38,24 @@ def create_delete_users_keyboard(*buttons: str) -> InlineKeyboardMarkup:
 users_to_delete = {}
 
 
-@router.message(F.text == 'bot users clear')
-async def clear_users(message: Message):
-    for user_id, name in users_db.copy().items():
+async def clear_users(user_id, name, sem: asyncio.Semaphore):
+    async with sem:
+        if "<" in name or ">" in name:
+            name = name.replace(">", "&gt;").replace("<", "&lt;")
         try:
             sent_message = await bot.send_message(chat_id=user_id, text="_", disable_notification=True)
             await bot.delete_message(chat_id=user_id, message_id=sent_message.message_id)
-        except Exception as e:
+        except aiogram.exceptions.TelegramForbiddenError as e:
             users_to_delete[user_id] = name
-        # await asyncio.sleep(0.05)
-    # print(users_to_delete)
+
+
+@router.message(F.text == 'bot users clear')
+async def dell_users(message: Message):
+
+    sem = asyncio.Semaphore(30)
+
+    tasks = [asyncio.create_task(clear_users(user_id, name, sem)) for user_id, name in users_db.copy().items()]
+    await asyncio.gather(*tasks)
 
     message_dict = {}
 
