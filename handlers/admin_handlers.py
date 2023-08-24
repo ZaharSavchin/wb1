@@ -1,3 +1,5 @@
+import asyncio
+
 from aiogram import Router, F
 from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from services.price_monitor import monitoring
@@ -48,13 +50,14 @@ async def stat_message(message: Message):
                           f'Армения: {country["amd"]}\n' \
                           f'В долларах США: {country["usd"]}'
 
-        if len(answer) > 50:
-            messages = len(answer) // 50
+        if len(answer) > 100:
+            messages = len(answer) // 100
             counter = 0
             for i in range(messages + 1):
-                stat = ''.join(answer[counter: counter + 50])
-                counter += 50
+                stat = ''.join(answer[counter: counter + 100])
+                counter += 100
                 await message.answer(f"{stat}")
+                await asyncio.sleep(1)
             await message.answer(f'{country_message}')
         else:
             stat = ''.join(answer)
