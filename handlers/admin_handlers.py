@@ -1,9 +1,10 @@
 import asyncio
+import json
 
 from aiogram import Router, F
-from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, FSInputFile
 from services.price_monitor import monitoring
-from database.database import users_db, users_items, users_max_items
+from database.database import users_db, users_items, users_max_items, url_images
 from aiogram.filters.callback_data import CallbackData
 from config_data.config import admin_id
 from handlers.currency_handlers import bot
@@ -50,12 +51,12 @@ async def stat_message(message: Message):
                           f'Армения: {country["amd"]}\n' \
                           f'В долларах США: {country["usd"]}'
 
-        if len(answer) > 100:
-            messages = len(answer) // 100
+        if len(answer) > 50:
+            messages = len(answer) // 50
             counter = 0
             for i in range(messages + 1):
-                stat = ''.join(answer[counter: counter + 100])
-                counter += 100
+                stat = ''.join(answer[counter: counter + 50])
+                counter += 50
                 await message.answer(f"{stat}")
                 await asyncio.sleep(1)
             await message.answer(f'{country_message}')
@@ -144,3 +145,29 @@ async def send_ads(message: Message):
 
     await bot.send_message(chat_id=admin_id, text=f'{counter} сообщений доставлено')
 
+
+@router.message(F.text == 'bot save db')
+async def save_db(message: Message):
+
+    if message.from_user.id == admin_id:
+
+        with open('users_db.json', 'w', encoding='utf-8-sig') as fl:
+            json.dump(users_db, fl, indent=4, ensure_ascii=False)
+
+        with open('users_items.json', 'w', encoding='utf-8-sig') as fl:
+            json.dump(users_items, fl, indent=4, ensure_ascii=False)
+
+        with open('users_max_items.json', 'w', encoding='utf-8-sig') as fl:
+            json.dump(users_max_items, fl, indent=4, ensure_ascii=False)
+
+        with open('url_images.json', 'w', encoding='utf-8-sig') as fl:
+            json.dump(url_images, fl, indent=4, ensure_ascii=False)
+
+        file = FSInputFile('users_db.json')
+        file_1 = FSInputFile('users_items.json')
+        file_2 = FSInputFile('users_max_items.json')
+        file_3 = FSInputFile('url_images.json')
+        await message.answer_document(file)
+        await message.answer_document(file_1)
+        await message.answer_document(file_2)
+        await message.answer_document(file_3)
