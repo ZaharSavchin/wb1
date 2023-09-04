@@ -1,6 +1,7 @@
 import asyncio
 import json
 
+import aiogram.exceptions
 from aiogram import Router, F
 from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, FSInputFile
 from services.price_monitor import monitoring
@@ -57,8 +58,12 @@ async def stat_message(message: Message):
             for i in range(messages + 1):
                 stat = ''.join(answer[counter: counter + 50])
                 counter += 50
-                await message.answer(f"{stat}")
-                await asyncio.sleep(2)
+                try:
+                    await message.answer(f"{stat}")
+                except aiogram.exceptions.TelegramRetryAfter:
+                    await asyncio.sleep(200)
+                    await message.answer(f"{stat}")
+                await asyncio.sleep(1)
             await message.answer(f'{country_message}')
         else:
             stat = ''.join(answer)
