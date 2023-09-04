@@ -58,7 +58,7 @@ async def stat_message(message: Message):
                 stat = ''.join(answer[counter: counter + 50])
                 counter += 50
                 await message.answer(f"{stat}")
-                await asyncio.sleep(1)
+                await asyncio.sleep(2)
             await message.answer(f'{country_message}')
         else:
             stat = ''.join(answer)
