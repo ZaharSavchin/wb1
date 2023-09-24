@@ -52,7 +52,7 @@ async def clear_users(user_id, name, sem: asyncio.Semaphore):
 @router.message(F.text == 'bot users clear')
 async def dell_users(message: Message):
 
-    sem = asyncio.Semaphore(30)
+    sem = asyncio.Semaphore(10)
 
     tasks = [asyncio.create_task(clear_users(user_id, name, sem)) for user_id, name in users_db.copy().items()]
     await asyncio.gather(*tasks)

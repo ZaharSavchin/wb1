@@ -31,5 +31,5 @@ async def monitoring():
         loop_counter += 1
         if loop_counter % 20 == 0 or loop_counter == 1:
             await bot.send_message(chat_id=1042048167, text=f"{loop_counter}")
-        await asyncio.sleep(300)
+        await asyncio.sleep(15)
 

@@ -88,6 +88,16 @@ async def get_list_of_items(message: Message):
             keys.extend(int(key) for key in dictionary.keys())
         for i in keys.copy():
             await main_search(cur, i, user_id)
+    max_itms = users_max_items[user_id]
+    used_itms = len(users_items[user_id][1])
+    await message.answer(f'Всего слотов: {max_itms}\n'
+                         f'Слотов занято: {used_itms}\n'
+                         f'Слотов свободно: {max_itms - used_itms}')
+
+
+@router.message(F.text == 'my id')
+async def clear_db(message: Message):
+    await message.answer(f'{message.from_user.id}')
 
 
 @router.message(lambda message: isinstance(message.text, str) and re.match(r'^\s*\d+\s*$', message.text))
