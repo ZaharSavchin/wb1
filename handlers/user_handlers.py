@@ -26,8 +26,11 @@ async def extract_unique_code(text):
 
 
 async def new_user(message):
+    message = f'{message.from_user.full_name}, @{message.from_user.username} присоединился'
+    if "<" in message or ">" in message:
+        message = message.replace(">", "&gt;").replace("<", "&lt;")
     await bot.send_message(chat_id=1303113402,
-                           text=f'{message.from_user.full_name}, @{message.from_user.username} присоединился')
+                           text=message)
 
 
 @router.message(CommandStart())
