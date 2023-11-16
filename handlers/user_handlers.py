@@ -26,7 +26,7 @@ async def extract_unique_code(text):
 
 
 async def new_user(message):
-    await bot.send_message(chat_id=1042048167,
+    await bot.send_message(chat_id=1303113402,
                            text=f'{message.from_user.full_name}, @{message.from_user.username} присоединился')
 
 
