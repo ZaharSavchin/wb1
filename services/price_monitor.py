@@ -27,9 +27,9 @@ async def monitoring():
                                 print(error)
                     except Exception as e:
                         print(e)
-            await asyncio.sleep(2)
+            await asyncio.sleep(1)
         loop_counter += 1
         if loop_counter % 5 == 0 or loop_counter == 1:
-            await bot.send_message(chat_id=1042048167, text=f"{loop_counter}")
+            await bot.send_message(chat_id=1303113402, text=f"{loop_counter}")
         await asyncio.sleep(15)
 
