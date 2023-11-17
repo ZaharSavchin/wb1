@@ -123,20 +123,27 @@ async def count_cur(message: Message):
     await message.answer(f'{country_message}')
 
 
-@router.message(F.text == 'bot send ads to users')
+@router.message(F.text.startswith('bot send ads to users'))
 async def send_ads(message: Message):
+    photo_url = 'none'
+    text = message.text[message.text.find("}") + 1:]
+    if "<" in text or ">" in text:
+        text = text.replace(">", "&gt;").replace("<", "&lt;")
+    if "{" in message.text and "}" in message.text:
+        photo_url = message.text[message.text.find("{") + 1: message.text.find("}")]
     counter = 0
     for user_id, name in users_db.copy().items():
         name = name[0]
         if "<" in name or ">" in name:
             name = name.replace(">", "&gt;").replace("<", "&lt;")
         try:
-            await bot.send_photo(chat_id=user_id,
-                                 photo='https://img.freepik.com/premium-vector/cute-raccoon-driving-a-racing-car_471222-1363.jpg',
-                                 caption=f'Здравствуйте <b>{name}</b>👋\n\n'
-                                         f'Переходите в новый чат-бот и отслеживайте объявления на сайте av.by!\n\n'
-                                         f'@EnotAvBot',
-                                 parse_mode='HTML')
+            if photo_url != 'none':
+                await bot.send_photo(chat_id=user_id,
+                                     photo=photo_url,
+                                     caption=text)
+            else:
+                await bot.send_message(chat_id=user_id,
+                                       text=text)
             counter += 1
         except Exception:
             await bot.send_message(chat_id=admin_id, text=f'{user_id}, {name} недоступен')
