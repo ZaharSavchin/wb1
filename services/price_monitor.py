@@ -30,6 +30,6 @@ async def monitoring():
             await asyncio.sleep(1)
         loop_counter += 1
         if loop_counter % 5 == 0 or loop_counter == 1:
-            await bot.send_message(chat_id=1303113402, text=f"{loop_counter}")
+            await bot.send_message(chat_id=1303113402, text=f"{loop_counter}", disable_notification=True)
         await asyncio.sleep(15)
 
