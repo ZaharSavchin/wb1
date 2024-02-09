@@ -44,7 +44,7 @@ async def process_start_command(message: Message):
                                                          f"Теперь у Вас максимальное количество отслеживаемых товаров: "
                                                          f"{users_max_items[int(ref_id)]}")
     if message.from_user.id not in users_max_items:
-        users_max_items[message.from_user.id] = 1
+        users_max_items[message.from_user.id] = 10
         await save_users_max_items()
     if message.from_user.id not in users_db:
         await new_user(message)
@@ -62,7 +62,7 @@ async def process_start_command(message: Message):
 @router.message(Command(commands='help'))
 async def process_help_command(message: Message):
     if message.from_user.id not in users_max_items:
-        users_max_items[message.from_user.id] = 1
+        users_max_items[message.from_user.id] = 10
         await save_users_max_items()
     await save_users_max_items()
     if message.from_user.id not in users_db:
@@ -77,7 +77,7 @@ async def process_help_command(message: Message):
 @router.message(Command(commands='list'))
 async def get_list_of_items(message: Message):
     if message.from_user.id not in users_max_items:
-        users_max_items[message.from_user.id] = 1
+        users_max_items[message.from_user.id] = 10
         await save_users_max_items()
     user_id = message.from_user.id
     if user_id not in users_items or len(users_items[user_id][1]) == 0:
@@ -107,7 +107,7 @@ async def clear_db(message: Message):
 async def add_item_process(message: Message):
     id_ = message.from_user.id
     if id_ not in users_max_items:
-        users_max_items[id_] = 1
+        users_max_items[id_] = 10
         await save_users_max_items()
     if id_ not in users_db:
         await new_user(message)
