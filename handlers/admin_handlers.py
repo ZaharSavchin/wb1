@@ -154,25 +154,23 @@ async def send_ads(message: Message):
 @router.message(F.text == 'bot save db')
 async def save_db(message: Message):
 
-    if message.from_user.id == admin_id:
+    with open('users_db.json', 'w', encoding='utf-8-sig') as fl:
+        json.dump(users_db, fl, indent=4, ensure_ascii=False)
 
-        with open('users_db.json', 'w', encoding='utf-8-sig') as fl:
-            json.dump(users_db, fl, indent=4, ensure_ascii=False)
+    with open('users_items.json', 'w', encoding='utf-8-sig') as fl:
+        json.dump(users_items, fl, indent=4, ensure_ascii=False)
 
-        with open('users_items.json', 'w', encoding='utf-8-sig') as fl:
-            json.dump(users_items, fl, indent=4, ensure_ascii=False)
+    with open('users_max_items.json', 'w', encoding='utf-8-sig') as fl:
+        json.dump(users_max_items, fl, indent=4, ensure_ascii=False)
 
-        with open('users_max_items.json', 'w', encoding='utf-8-sig') as fl:
-            json.dump(users_max_items, fl, indent=4, ensure_ascii=False)
+    with open('url_images.json', 'w', encoding='utf-8-sig') as fl:
+        json.dump(url_images, fl, indent=4, ensure_ascii=False)
 
-        with open('url_images.json', 'w', encoding='utf-8-sig') as fl:
-            json.dump(url_images, fl, indent=4, ensure_ascii=False)
-
-        file = FSInputFile('users_db.json')
-        file_1 = FSInputFile('users_items.json')
-        file_2 = FSInputFile('users_max_items.json')
-        file_3 = FSInputFile('url_images.json')
-        await message.answer_document(file)
-        await message.answer_document(file_1)
-        await message.answer_document(file_2)
-        await message.answer_document(file_3)
+    file = FSInputFile('users_db.json')
+    file_1 = FSInputFile('users_items.json')
+    file_2 = FSInputFile('users_max_items.json')
+    file_3 = FSInputFile('url_images.json')
+    await message.answer_document(file)
+    await message.answer_document(file_1)
+    await message.answer_document(file_2)
+    await message.answer_document(file_3)
