@@ -147,6 +147,7 @@ async def send_ads(message: Message):
             counter += 1
         except Exception:
             await bot.send_message(chat_id=admin_id, text=f'{user_id}, {name} недоступен')
+        await asyncio.sleep(1)
 
     await bot.send_message(chat_id=admin_id, text=f'{counter} сообщений доставлено')
 
