@@ -5,7 +5,8 @@ import aiogram
 from aiogram import Router, F
 from aiogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, FSInputFile
 from services.price_monitor import monitoring
-from database.database import users_db, users_items, users_max_items, url_images
+from database.database import users_db, users_items, users_max_items, url_images, save_users_max_items
+
 from aiogram.filters.callback_data import CallbackData
 from config_data.config import admin_id
 from handlers.currency_handlers import bot
@@ -175,3 +176,12 @@ async def save_db(message: Message):
     await message.answer_document(file_1)
     await message.answer_document(file_2)
     await message.answer_document(file_3)
+
+
+@router.message(F.text == 'add9slotstousers')
+async def clear_db(message: Message):
+    for id_, items_ in users_max_items.items():
+        users_max_items[id_] += 9
+    await save_users_max_items()
+    await message.answer('finish 9')
+
