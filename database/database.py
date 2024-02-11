@@ -61,6 +61,9 @@ if users_items_dict_json is not None:
     users_items = {int(k): v for k, v in users_items.items()}
     for k, v in users_items.items():
         if len(v) > 1:
+            for i, price in v[1].items():
+                if price == None:
+                    v[1][i] = 0 
             v[1] = {int(k): float(v) for k, v in v[1].items()}
 else:
     users_items = {}
