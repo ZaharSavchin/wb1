@@ -185,3 +185,28 @@ async def clear_db(message: Message):
     await save_users_max_items()
     await message.answer('finish 9')
 
+
+@router.message(F.text == 'bot add db')
+async def save_db(message: Message):
+
+    with open('url_images.json', encoding='utf-8-sig') as f:
+        images = json.load(f)
+    url_images.update(images)
+    await save_url_images()
+
+    with open('users_db.json', encoding='utf-8-sig') as f:
+        users = json.load(f)
+    users_db.update(users)
+    await save_users_db()
+
+    with open('users_items.json', encoding='utf-8-sig') as f:
+        items = json.load(f)
+    users_items.update(items)
+    await save_users_items()
+
+    with open('users_max_items.json', encoding='utf-8-sig') as f:
+        max_items = json.load(f)
+    users_max_items.update(max_items)
+    await save_users_max_items()
+
+    await message.answer('fine')
