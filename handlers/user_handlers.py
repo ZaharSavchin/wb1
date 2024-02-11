@@ -9,7 +9,7 @@ from lexicon.lexicon import LEXICON, LEXICON_CURRENCY
 from services.search_function import main_search, get_name
 from keyboards.currency_kb import create_currency_keyboard
 
-from config_data.config import Config, load_config
+from config_data.config import Config, load_config, admin_id
 from aiogram import Bot
 
 
@@ -29,7 +29,7 @@ async def new_user(message):
     message = f'{message.from_user.full_name}, @{message.from_user.username} присоединился'
     if "<" in message or ">" in message:
         message = message.replace(">", "&gt;").replace("<", "&lt;")
-    await bot.send_message(chat_id=1303113402,
+    await bot.send_message(chat_id=admin_id,
                            text=message)
 
 
