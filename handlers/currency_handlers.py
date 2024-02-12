@@ -32,7 +32,7 @@ async def process_rub_press(callback: CallbackQuery):
 async def process_rub_press(callback: CallbackQuery):
     users_items[callback.from_user.id][0] = 'byn'
     await callback.answer()
-    await bot.send_message(chat_id=callback.from_user.id, text=f"Цены будут отображаться в Беларусских рублях 🇧🇾\n\n"
+    await bot.send_message(chat_id=callback.from_user.id, text=f"Цены будут отображаться в Белорусских рублях 🇧🇾\n\n"
                                                                f"{help_text}")
     await save_users_items()
     await callback.message.delete()
