@@ -17,7 +17,7 @@ router = Router()
 
 @router.message(F.text.startswith('bot stat'))
 async def stat_message(message: Message):
-    if message.text.endswith('start'):
+    if message.text.endswith('start') and message.from_user.id == admin_id:
         await message.answer('цикл запущен')
         await monitoring()
     elif message.text.endswith("all"):
@@ -90,22 +90,23 @@ class MaxItemsCallbackFactory(CallbackData, prefix='max_items'):
 
 @router.message(F.text.startswith('bot change max_items'))
 async def change_max_items(message: Message):
-    i = int(message.text.split()[-1])
-    name = users_db[i][0]
-    username = users_db[i][1]
-    refs = users_max_items[i]
-    if i in users_items:
-        cur = users_items[i][0]
-        items = users_items[i][1:]
-        answer = f"{name}(@{username}, {i}, {refs}): {cur}, {items}✅\n"
-    else:
-        answer = f"{name}(@{username}, {i}, {refs})🤷\n"
-
-    button_plus = InlineKeyboardButton(text='+', callback_data=MaxItemsCallbackFactory(user_id=i, change='+').pack())
-    button_minus = InlineKeyboardButton(text='-', callback_data=MaxItemsCallbackFactory(user_id=i, change='-').pack())
-    markup = InlineKeyboardMarkup(inline_keyboard=[[button_minus, button_plus]])
-
-    await message.answer(text=answer, reply_markup=markup)
+    if message.from_user.id == admin_id:
+        i = int(message.text.split()[-1])
+        name = users_db[i][0]
+        username = users_db[i][1]
+        refs = users_max_items[i]
+        if i in users_items:
+            cur = users_items[i][0]
+            items = users_items[i][1:]
+            answer = f"{name}(@{username}, {i}, {refs}): {cur}, {items}✅\n"
+        else:
+            answer = f"{name}(@{username}, {i}, {refs})🤷\n"
+    
+        button_plus = InlineKeyboardButton(text='+', callback_data=MaxItemsCallbackFactory(user_id=i, change='+').pack())
+        button_minus = InlineKeyboardButton(text='-', callback_data=MaxItemsCallbackFactory(user_id=i, change='-').pack())
+        markup = InlineKeyboardMarkup(inline_keyboard=[[button_minus, button_plus]])
+    
+        await message.answer(text=answer, reply_markup=markup)
 
 
 @router.message(F.text.startswith('bot cur'))
@@ -126,31 +127,32 @@ async def count_cur(message: Message):
 
 @router.message(F.text.startswith('bot send ads to users'))
 async def send_ads(message: Message):
-    photo_url = 'none'
-    text = message.text[message.text.find("}") + 1:]
-    if "<" in text or ">" in text:
-        text = text.replace(">", "&gt;").replace("<", "&lt;")
-    if "{" in message.text and "}" in message.text:
-        photo_url = message.text[message.text.find("{") + 1: message.text.find("}")]
-    counter = 0
-    for user_id, name in users_db.copy().items():
-        name = name[0]
-        if "<" in name or ">" in name:
-            name = name.replace(">", "&gt;").replace("<", "&lt;")
-        try:
-            if photo_url != 'none':
-                await bot.send_photo(chat_id=user_id,
-                                     photo=photo_url,
-                                     caption=text)
-            else:
-                await bot.send_message(chat_id=user_id,
-                                       text=text)
-            counter += 1
-        except Exception:
-            await bot.send_message(chat_id=admin_id, text=f'{user_id}, {name} недоступен')
-        await asyncio.sleep(1)
-
-    await bot.send_message(chat_id=admin_id, text=f'{counter} сообщений доставлено')
+    if message.from_user.id == admin_id:
+        photo_url = 'none'
+        text = message.text[message.text.find("}") + 1:]
+        if "<" in text or ">" in text:
+            text = text.replace(">", "&gt;").replace("<", "&lt;")
+        if "{" in message.text and "}" in message.text:
+            photo_url = message.text[message.text.find("{") + 1: message.text.find("}")]
+        counter = 0
+        for user_id, name in users_db.copy().items():
+            name = name[0]
+            if "<" in name or ">" in name:
+                name = name.replace(">", "&gt;").replace("<", "&lt;")
+            try:
+                if photo_url != 'none':
+                    await bot.send_photo(chat_id=user_id,
+                                         photo=photo_url,
+                                         caption=text)
+                else:
+                    await bot.send_message(chat_id=user_id,
+                                           text=text)
+                counter += 1
+            except Exception:
+                await bot.send_message(chat_id=admin_id, text=f'{user_id}, {name} недоступен')
+            await asyncio.sleep(1)
+    
+        await bot.send_message(chat_id=admin_id, text=f'{counter} сообщений доставлено')
 
 
 @router.message(F.text == 'bot save db')
