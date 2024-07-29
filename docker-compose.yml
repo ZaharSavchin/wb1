@@ -1,0 +1,10 @@
+version: "2"
+services:
+    reris:
+        image: redis
+        container_name: redis
+    worker:
+        image: zahar96/wb_parser_bot
+        environment:
+            - ADMIN_ID=6031519621
+            - BOT_TOKEN=6019374546:AAE-lEpmiXg38qJzQz_qoCfKJKofHwKxxJ9
